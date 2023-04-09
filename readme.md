@@ -95,9 +95,23 @@ Using the specialized block, you can retrieve the value of the sensor connected 
 
 <img src="img/block.png" style="width: 33%;">
 
-| Analog Read | Digital Read |
-:-------:|:-------:|
-|![](img/block_analog.png)|![](img/block_digital.png)|
+<table>
+    <tbody>
+        <tr>
+            <td width="20%" align="center" valign="middle">Analog Read</td>
+            <td width="20%" align="center" valign="middle">Digital Read</td>
+        </tr>
+        <tr></tr>
+        <tr>
+            <td width="20%" align="center" valign="middle">
+                <img src="img/block_analog.png">
+            </td>
+            <td width="20%" align="center" valign="middle">
+                <img src="img/block_digital.png">
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 <!--
 ## Build your own Adapter
