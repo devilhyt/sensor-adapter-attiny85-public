@@ -19,7 +19,7 @@ Connect the power supply to the sensor and connect the signal pins of the sensor
 
 | Button | Magnetic | Tilt |
 |:-------:|:-------:|:------:|
-|![](img/button.JPG)|![](img/magnetic%20_switch.JPG)|![](img/tilt_sensor.JPG)|
+|![](img/button.JPG)|![](img/magnetic_switch.JPG)|![](img/tilt_sensor.JPG)|
 
 | Roation | Temperature | Light  |
 |:-------:|:-------:|:------:|
