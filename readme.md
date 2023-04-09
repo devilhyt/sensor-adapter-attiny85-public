@@ -17,13 +17,45 @@ Connect the power supply to the sensor and connect the signal pins of the sensor
 
 ## Solutions
 
-| Button | Magnetic | Tilt |
-|:-------:|:-------:|:------:|
-|![](img/button.JPG)|![](img/magnetic_switch.JPG)|![](img/tilt_sensor.JPG)|
-
-| Roation | Temperature | Light  |
-|:-------:|:-------:|:------:|
-|![](img/rotation_sensor.JPG)|![](img/temperature_sensor.JPG)|![](img/light_sensor.JPG)|
+<table>
+    <tbody>
+        <tr>
+            <td width="33%" align="center" valign="middle">Button</td>
+            <td width="33%" align="center" valign="middle">Magnetic Switch</td>
+            <td width="33%" align="center" valign="middle">Tilt Sensor</td>
+        </tr>
+        <tr></tr>
+        <tr>
+            <td width="33%" align="center" valign="middle">
+                <img src="img/button.JPG">
+            </td>
+            <td width="33%" align="center" valign="middle">
+                <img src="img/magnetic_switch.JPG">
+            </td>
+            <td width="33%" align="center" valign="middle">
+                <img src="img/tilt_sensor.JPG">
+            </td>
+        </tr>
+        <tr></tr>
+        <tr>
+            <td width="33%" align="center" valign="middle">Roation Sensor</td>
+            <td width="33%" align="center" valign="middle">Temperature Sensor</td>
+            <td width="33%" align="center" valign="middle">Light Sensor</td>
+        </tr>
+        <tr></tr>
+        <tr>
+            <td width="33%" align="center" valign="middle">
+                <img src="img/rotation_sensor.JPG">
+            </td>
+            <td width="33%" align="center" valign="middle">
+                <img src="img/temperature_sensor.JPG">
+            </td>
+            <td width="33%" align="center" valign="middle">
+                <img src="img/light_sensor.JPG">
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 ⚠️ Supported sensors include, but are not limited to, the sensors mentioned above.
 <!--⚠️ 支援的感測器包括但不限於上述提到的感測器。--->
@@ -35,9 +67,27 @@ In the EV3 port view, the following three modes are available:
 
 <img src="img/portview_menu.png" style="width: 33%;">
 
-| Analog | Digital | Up time (Debug) |
-|:-------:|:-------:|:------:|
-|![](img/portview_analog.png)|![](img/portview_digital.png)|![](img/portview_uptime.png)|
+<table>
+    <tbody>
+        <tr>
+            <td width="33%" align="center" valign="middle">Analog</td>
+            <td width="33%" align="center" valign="middle">Digital</td>
+            <td width="33%" align="center" valign="middle">Up time (Debug)</td>
+        </tr>
+        <tr></tr>
+        <tr>
+            <td width="33%" align="center" valign="middle">
+                <img src="img/portview_analog.png">
+            </td>
+            <td width="33%" align="center" valign="middle">
+                <img src="img/portview_digital.png">
+            </td>
+            <td width="33%" align="center" valign="middle">
+                <img src="img/portview_uptime.png">
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 ### EV3-G Block
 Using the specialized block, you can retrieve the value of the sensor connected to the adapter. There are two modes available for the block:
