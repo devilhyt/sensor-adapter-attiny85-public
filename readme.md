@@ -123,7 +123,7 @@ Using the specialized block, you can retrieve the value of the sensor connected 
 ## Contributors
 
 - HsiangYi Tsai, [devilhyt](https://github.com/devilhyt) on Github (Author)
-- Anthony Hsu, [a10036gt](https://github.com/a10036gt) on Github (PCB Design / Technical Support)
+- Anthony Hsu, [a10036gt](https://github.com/a10036gt) on Github (PCB Design / Technical Assistance)
 
 <!--
 ## References
