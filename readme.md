@@ -5,7 +5,7 @@ An adapter that allows LEGO EV3 to communicate with analog/digital sensors.
 <img src="img/board.png" style="width: 50%;">
 
 ## How it works?
-As is well known, typical analog/digital sensors cannot communicate directly with LEGO EV3. Therefore, we use an MCU to convert sensor information into LEGO UART format and then transmit the information to the EV3 host via the **LEGO UART Protocol**.  
+As is well known, common analog/digital sensors cannot communicate directly with the LEGO EV3. Therefore, we use a microcontroller (MCU) to convert sensor information into LEGO UART format and then transmit the information to the EV3 host via the **LEGO UART Protocol**.   
 <!--眾所周知，一般的類比/數位感測器無法直接與LEGO EV3通訊。因此，我們使用MCU將感測器資訊轉換成LEGO UART格式，再透過LEGO UART協議將資訊傳送至EV3主機。--->
 
 ## Wiring
