@@ -150,8 +150,16 @@ class LUMPValue {
 };
 
 /* LUMP mode */
-class LUMPMode {
+class LUMPMode final{
+  /* aggregate class */
   public:
+    LUMPMode() = default;
+    ~LUMPMode() = default;
+    LUMPMode(const LUMPMode&) = default;
+    LUMPMode(LUMPMode&&) = default;
+    LUMPMode& operator=(const LUMPMode&) = default;
+    LUMPMode& operator=(LUMPMode&&) = default;
+
     char name[12];
     char symbol[5];
     u8_t data_sets;
@@ -165,8 +173,14 @@ class LUMPMode {
 
 /* LUMP Sensor */
 template <typename T>
-class LUMPSensor {
+class LUMPSensor final{
   public:
+    LUMPSensor() = default;
+    ~LUMPSensor() = default;
+    LUMPSensor(const LUMPSensor&) = default;
+    LUMPSensor(LUMPSensor&&) = default;
+    LUMPSensor& operator=(const LUMPSensor&) = default;
+    LUMPSensor& operator=(LUMPSensor&&) = default;
     /**
      * @brief Create a sensor
      *
