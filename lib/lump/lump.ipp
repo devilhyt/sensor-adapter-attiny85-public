@@ -59,7 +59,13 @@ void LUMPSensor<T>::transmit() {
       /* Handshake state machine */
       switch (hsk_state) {
         case HskSync:
-          // hidden
+          uart_transmit(SYS_SYNC);
+          if (with_xtal) {
+            hsk_state = HskId;
+          } else {
+            event_ms  = last_ms;
+            hsk_state = HskWaitForSync;
+          }
           break;
         /* Wait for sync from host
          * This state is exited through from the command processing code in the receive() function.
@@ -74,15 +80,36 @@ void LUMPSensor<T>::transmit() {
           break;
 
         case HskId:
-          // hidden
+          tx_buf[0] = msg_encode(MSG_CMD, 1, CMD_TYPE);
+          tx_buf[1] = type;
+          tx_buf[2] = msg_checksum(tx_buf, 2);
+          uart_transmit(tx_buf, 3);
+          hsk_state = HskModes;
           break;
 
         case HskModes:
-          // hidden
+          tx_buf[1] = mode_num - 1;
+          if (view == VIEW_DEFAULT) {
+            tx_buf[0] = msg_encode(MSG_CMD, 1, CMD_MODES);
+            tx_buf[2] = msg_checksum(tx_buf, 2);
+            uart_transmit(tx_buf, 3);
+          } else {
+            tx_buf[0] = msg_encode(MSG_CMD, 2, CMD_MODES);
+            tx_buf[2] = view - 1;
+            tx_buf[3] = msg_checksum(tx_buf, 3);
+            uart_transmit(tx_buf, 4);
+          }
+          hsk_state = HskSpeed;
           break;
 
         case HskSpeed:
-          // hidden
+          tx_buf[0] = msg_encode(MSG_CMD, 4, CMD_SPEED);
+          memcpy(&tx_buf[1], &speed, 4);
+          tx_buf[5] = msg_checksum(tx_buf, 5);
+          uart_transmit(tx_buf, 6);
+          hsk_mode_ptr   = nullptr;
+          hsk_mode_index = 0;
+          hsk_state      = HskModesName;
           break;
 
         case HskModesName:
@@ -113,7 +140,16 @@ void LUMPSensor<T>::transmit() {
           break;
 
         case HskModesFormat:
-          // hidden
+          tx_buf[0] = msg_encode(MSG_INFO, 4, hsk_mode_index);
+          tx_buf[1] = INFO_FORMAT;
+          tx_buf[2] = hsk_mode_ptr->data_sets;
+          tx_buf[3] = hsk_mode_ptr->data_type;
+          tx_buf[4] = hsk_mode_ptr->figures;
+          tx_buf[5] = hsk_mode_ptr->decimals;
+          tx_buf[6] = msg_checksum(tx_buf, 6);
+          uart_transmit(tx_buf, 7);
+          event_ms  = last_ms;
+          hsk_state = HskModesPause;
           break;
 
         case HskModesPause:
@@ -127,7 +163,9 @@ void LUMPSensor<T>::transmit() {
           break;
 
         case HskAck:
-          // hidden
+          uart_transmit(SYS_ACK);
+          event_ms  = last_ms;
+          hsk_state = HskWaitForAck;
           break;
 
         /* Wait for ACK reply
@@ -165,7 +203,8 @@ void LUMPSensor<T>::transmit() {
       break;
 
     case SensorNack:
-      // hidden
+      uart_transmit(SYS_NACK);
+      sensor_state = SensorRunning;
       break;
 
     default:
@@ -197,7 +236,20 @@ void LUMPSensor<T>::receive() {
         break;
       }
       case ReceiveCheckMsgType: {
-        // hidden
+        if (byte_received == SYS_SYNC || byte_received == SYS_NACK || byte_received == SYS_ACK) { /* System messages */
+          rx_buf[0]     = byte_received;
+          receive_state = RecevieOperate;
+        } else { /* Other types of messages */
+          rx_len = exp2((byte_received & MSG_LEN_MASK) >> MSGLEN_SHIFT) + 2;
+          if (rx_len <= MAX_MSG_LEN) {
+            rx_index      = 0;
+            rx_checksum   = 0xFF;
+            receive_state = ReceiveDecode;
+          } else { /* Payload length too long. look for next message */
+            rx_len        = 0;
+            receive_state = ReceiveGetByte;
+          }
+        }
         break;
       }
       case ReceiveDecode: {
@@ -223,7 +275,32 @@ void LUMPSensor<T>::receive() {
         break;
       }
       case RecevieOperate: {
-        // hidden
+        if (rx_buf[0] == SYS_NACK) {
+          wdt_reset();
+          force_send = true;
+          return;
+        }
+
+        switch (sensor_state) {
+          /* Handle host messages during handshake */
+          case SensorHandshake: {
+            if (hsk_state == HskWaitForSync && rx_buf[0] == SYS_SYNC)
+              hsk_state = HskId; /* Sync sucess, start handshake */
+            if (hsk_state == HskWaitForAck && rx_buf[0] == SYS_ACK)
+              hsk_state = HskSwitchBaudRate; /* Ack received, start data mode */
+            break;
+          }
+          /* handle host messages in running condition */
+          case SensorRunning: {
+            if (rx_buf[0] == (MSG_CMD | CMD_SELECT)) { /* Select mode */
+              current_mode = rx_buf[1];
+              sensor_state = SensorModeInit;
+            }
+            break;
+          }
+          default:
+            break;
+        }
         return;
       }
       default:
@@ -236,12 +313,25 @@ void LUMPSensor<T>::receive() {
 
 template <typename T>
 void LUMPSensor<T>::hsk_mode_name_symbol(char *ptr, u8_t info_type) {
-  // hidden
+  u8_t len = strlen(ptr);
+  memcpy(&tx_buf[2], ptr, len); // No zero termination necessary
+  len             = ceil_power2(len);
+  tx_buf[0]       = msg_encode(MSG_INFO, len, hsk_mode_index);
+  tx_buf[1]       = info_type;
+  tx_buf[len + 2] = msg_checksum(tx_buf, len + 2);
+  uart_transmit(tx_buf, len + 3);
 }
 
 template <typename T>
 void LUMPSensor<T>::hsk_mode_value(LUMPValue *ptr, u8_t info_type) {
-  // hidden
+  if (ptr) {
+    tx_buf[0] = msg_encode(MSG_INFO, 8, hsk_mode_index);
+    tx_buf[1] = info_type;
+    memcpy(&tx_buf[2], &(ptr->low), 4);
+    memcpy(&tx_buf[6], &(ptr->high), 4);
+    tx_buf[10] = msg_checksum(tx_buf, 10);
+    uart_transmit(tx_buf, 11);
+  }
 }
 
 template <typename T>
@@ -359,7 +449,11 @@ void LUMPSensor<T>::send_data8(u8_t b) {
 
 template <typename T>
 void LUMPSensor<T>::send_data8(u8_t *b, u8_t len) {
-  // hidden
+  tx_buf[0] = msg_encode(MSG_DATA, len, current_mode);
+  memcpy(&tx_buf[1], b, len);
+  tx_buf[len + 1] = msg_checksum(tx_buf, len + 1);
+  uart_transmit(tx_buf, len + 2);
+  force_send = false;
 }
 
 template <typename T>
