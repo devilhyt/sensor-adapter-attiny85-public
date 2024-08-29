@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EditorStrings>
+  <PolyGroups ModuleName="OFDLAnalogDigitalSensorAdapter">
+    <PolyGroup Name="OFDLAnalogDigitalSensorAdapter" DisplayName="OFDL Analog/Digital Sensor Adapter - OFDL Dev.">
+      <Description><![CDATA[<p>Context help for PolyGroup <b>HTCompassSensor</b></p>]]></Description>
+      <Parameter Name="Port" DisplayName="Port">
+        <Description><![CDATA[<p>Context help for Parameter <b>Port</b></p>]]></Description>
+      </Parameter>
+      <Parameter Name="Value" DisplayName="Value">
+        <Description><![CDATA[<p>Context help for Parameter <b>Value</b></p>]]></Description>
+      </Parameter>
+      <Parameter Name="State" DisplayName="State">
+        <Description><![CDATA[<p>Context help for Parameter <b>State</b></p>]]></Description>
+      </Parameter>
+      <Block Mode="AnalogRead" DisplayName="Analog Read">
+        <Description><![CDATA[<p>Context help for Block <b>Analog Read</b></p>]]></Description>
+      </Block>
+      <Block Mode="DigitalRead" DisplayName="Digital Read">
+        <Description><![CDATA[<p>Context help for Block <b>Digital Read</b></p>]]></Description>
+      </Block>
+    </PolyGroup>
+  </PolyGroups>
+</EditorStrings>

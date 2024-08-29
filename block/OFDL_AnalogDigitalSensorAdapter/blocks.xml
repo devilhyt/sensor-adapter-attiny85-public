@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EditorDefinitions>
+  <PolyGroups ModuleName="OFDLAnalogDigitalSensorAdapter" ModuleVersion="1.0 (By OFDL Dev.)">
+    <PolyGroup Name="OFDLAnalogDigitalSensorAdapter" DisplayNamePrefix="OFDLAnalogDigitalSensorAdapter" BlockFamily="Sensor">
+      <Parameter Name="Port" CompilerDirectives="OneInputPort" Direction="Input" DefaultValue="1.1" />
+      <Parameter Name="Value" Identification="builtin://Identification_Numeric.png" DataType="Single" Direction="Output" />
+      <Parameter Name="State" Identification="builtin://Identification_OutputBoolean.png" DataType="Boolean" Direction="Output" />
+      <Hardware>
+        <NXTPlotColor>#ff30d5c8</NXTPlotColor>
+        <EV3PlotColor>#ff30d5c8</EV3PlotColor>
+        <EV3AutoID>83</EV3AutoID>
+        <Direction>Input</Direction>
+        <DefaultPort>1.1</DefaultPort>
+      </Hardware>
+      <Block>
+        <Mode>AnalogRead</Mode>
+        <Reference Type="VILib" Name="OFDLAnalogDigitalSensorAdapterAnalogRead.vix" />
+        <ParameterReference Name="Port" />
+        <ParameterReference Name="Value" />
+        <BlockInterface>Measure</BlockInterface>
+        <HardwareModeInfo Name="AnalogRead" ID="0" Range="0,1023" Unit="" />
+        <PaletteInfo Weight="0.5" />
+        <Flags>PBROnly</Flags>
+      </Block>
+      <Block>
+        <Mode>DigitalRead</Mode>
+        <Reference Type="VILib" Name="OFDLAnalogDigitalSensorAdapterDigitalRead.vix" />
+        <ParameterReference Name="Port" />
+        <ParameterReference Name="State" CompilerDirectives="Result" />
+        <BlockInterface>Selector</BlockInterface>
+        <HardwareModeInfo Name="DigitalRead" ID="1" Range="0,1" Unit="" />
+        <Flags>PBROnly</Flags>
+      </Block>
+    </PolyGroup>
+  </PolyGroups>
+
+</EditorDefinitions>
